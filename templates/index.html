@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Adventure Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #282c34;
+      color: white;
+      text-align: center;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 2px solid #61dafb;
+      background-color: #20232a;
+      border-radius: 5px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #61dafb;
+      color: #000;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #21a1f1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Text Adventure Game</h1>
+  <p>You find yourself in a dark forest. What will you do?</p>
+  <input type="text" id="action" placeholder="Enter your action here" />
+  <button onclick="sendAction()">Submit</button>
+  <div id="output">Your adventure begins...</div>
+
+  <script>
+    async function sendAction() {
+      const action = document.getElementById('action').value;
+
+      // Send the input to the Python backend
+      const response = await fetch('/action', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ input: action }),
+      });
+
+      const result = await response.json();
+      document.getElementById('output').innerText = result.response;
+      document.getElementById('action').value = ''; // Clear input
+    }
+  </script>
+</body>
+</html>
